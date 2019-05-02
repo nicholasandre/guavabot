@@ -1,6 +1,6 @@
 # Put your solution here.
-
 import networkx as nx
+from networkx.algorithms.approximation.steinertree import steiner_tree
 from math import ceil
 
 def solve(client):
@@ -68,7 +68,6 @@ def count_score(vertex, scout_result, lies):
 	for student in scout_result[vertex]:
 		sum_score += (lambda x: 1 if x else -1)(scout_result[vertex][student]) * (1 - ((max_lies - lies[student]) / client.v))
 
-
 def remote_mst(mst, nodes, client):
 	while nx.number_of_nodes(mst) > 1:
 		leaves = [x for x in mst.nodes() if len(mst.edges(x)) == 1]
@@ -76,3 +75,4 @@ def remote_mst(mst, nodes, client):
 		neighbor = [n for n in mst.neighbors(leaf)][0]
 		client.remote(leaf, neighbor)
 		mst.remove_node(leaf)
+

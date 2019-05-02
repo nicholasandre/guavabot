@@ -49,14 +49,24 @@ def solve(client):
     		if path_to_home[1] not in bots_locations:
     			bots_locations.append(path_to_home[1])
     		bots_at[path_to_home[1]] += remote_result
-    		
+    		for student in scout_result[most_probable_vertex]:
+    			if not scout_result[most_probable_vertex][student]:
+    				lies[student] += 1
+    	else:
+    		for student in scout_result[most_probable_vertex]:
+    			if scout_result[most_probable_vertex][student]:
+    				lies[student] += 1
+    	unvisited.pop(most_probable_vertex)
+
+    client.end()
+
 
 
 
 def count_score(vertex, scout_result, lies):
 	sum_score = 0
 	for student in scout_result[vertex]:
-		sum_score += (lambda x: 1 if x else -1)(student) * (1 - ((max_lies - lies[student]) / client.v))
+		sum_score += (lambda x: 1 if x else -1)(scout_result[vertex][student]) * (1 - ((max_lies - lies[student]) / client.v))
 
 
 

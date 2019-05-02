@@ -57,7 +57,7 @@ def solve(client):
     			if scout_result[most_probable_vertex][student]:
     				lies[student] += 1
     	unvisited.pop(most_probable_vertex)
-
+    
     client.end()
 
 
@@ -69,8 +69,10 @@ def count_score(vertex, scout_result, lies):
 		sum_score += (lambda x: 1 if x else -1)(scout_result[vertex][student]) * (1 - ((max_lies - lies[student]) / client.v))
 
 
-
-
-
-
-
+def remote_mst(mst, nodes, client):
+	while nx.number_of_nodes(mst) > 1:
+		leaves = [x for x in mst.nodes() if len(mst.edges(x)) == 1]
+		leaf = leaves.pop()
+		neighbor = [n for n in mst.neighbors(leaf)][0]
+		client.remote(leaf, neighbor)
+		mst.remove_node(leaf)

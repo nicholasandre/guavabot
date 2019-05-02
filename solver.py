@@ -55,13 +55,13 @@ def solve(client):
             for student in scout_result[most_probable_vertex]:
                 if scout_result[most_probable_vertex][student]:
                     lies[student] += 1
+        if most_probable_vertex in bots_locations:
+            bots_locations.remove(most_probable_vertex)
         unvisited.pop(most_probable_vertex)
+    bots_locations.append(client.h)
     updated_graph = steiner_tree(graph, bots_locations)
     remote_mst(nx.Graph(updated_graph), client)
     client.end()
-
-
-
 
 def count_score(vertex, scout_result, lies, max_lies, client):
     sum_score = 0
@@ -78,3 +78,4 @@ def remote_mst(mst, client):
         neighbor = [n for n in mst.neighbors(leaf)][0]
         client.remote(leaf, neighbor)
         mst.remove_node(leaf)
+        

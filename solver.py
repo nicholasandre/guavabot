@@ -57,7 +57,7 @@ def solve(client):
                     lies[student] += 1
         unvisited.pop(most_probable_vertex)
     updated_graph = steiner_tree(graph, bots_locations)
-    mst = remote_mst(updated_graph, client)
+    remote_mst(nx.Graph(updated_graph), client)
     client.end()
 
 
@@ -73,6 +73,8 @@ def remote_mst(mst, client):
     while nx.number_of_nodes(mst) > 1:
         leaves = [x for x in mst.nodes() if len(mst.edges(x)) == 1]
         leaf = leaves.pop()
+        if leaf == client.h:
+            leaf = leaves.pop()
         neighbor = [n for n in mst.neighbors(leaf)][0]
         client.remote(leaf, neighbor)
         mst.remove_node(leaf)
